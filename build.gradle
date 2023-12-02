@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+repositories {
+    maven { url "https://reposilite.appleptr16.com/appleptr16" }
+    mavenCentral()
+}
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+project.group groupValue
+project.version versionValue
+publishing {
+    repositories {
+        maven {
+            name 'appleptr16Repo'
+            url 'https://reposilite.appleptr16.com/appleptr16'
+            credentials(PasswordCredentials)
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            setGroup groupValue
+            setVersion versionValue
+            from components.java
+        }
+    }
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        cacheDynamicVersionsFor 1, 'seconds'
+        cacheChangingModulesFor 1, 'seconds'
+    }
+}
+
+project.ext.ebean_version = '13.14.1'
+// https://search.maven.org/search?q=g:io.ebean
+dependencies {
+    // sql
+    compileOnly "io.ebean:ebean-postgres:${ebean_version}"
+
+    // migration
+    compileOnly "io.ebean:ebean-ddl-generator:${ebean_version}"
+
+    // logging
+    compileOnly 'org.apache.logging.log4j:log4j-api:2.20.0'
+
+    compileOnly 'com.google.code.gson:gson:2.10'
+}
+
+jar {
+    manifest {
+        attributes 'Multi-Release': true
+    }
+}
