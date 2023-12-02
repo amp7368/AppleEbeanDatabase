@@ -1,6 +1,6 @@
 package apple.lib.ebean.database.config;
 
-public abstract class AppleEbeanBaseConfig implements AppleEbeanDatabaseConfig {
+public abstract class AppleEbeanDatabaseBaseConfig implements AppleEbeanDatabaseConfig {
 
     protected boolean shouldGenerateMigration = false;
     protected boolean shouldCreateDatabase = false;

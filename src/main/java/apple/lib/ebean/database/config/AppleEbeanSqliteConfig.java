@@ -4,7 +4,7 @@ import io.ebean.datasource.DataSourceConfig;
 import io.ebean.migration.DbPlatformNames;
 import java.io.File;
 
-public class AppleEbeanSqliteConfig extends AppleEbeanBaseConfig {
+public class AppleEbeanSqliteConfig extends AppleEbeanDatabaseBaseConfig {
 
     private final transient File file;
 

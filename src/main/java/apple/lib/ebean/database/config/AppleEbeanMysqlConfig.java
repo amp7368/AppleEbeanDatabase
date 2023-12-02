@@ -3,7 +3,7 @@ package apple.lib.ebean.database.config;
 import io.ebean.datasource.DataSourceConfig;
 import io.ebean.migration.DbPlatformNames;
 
-public class AppleEbeanMysqlConfig extends AppleEbeanBaseConfig {
+public class AppleEbeanMysqlConfig extends AppleEbeanDatabaseBaseConfig {
 
     protected String username = "${username}";
     protected String password = "${password}";

@@ -3,7 +3,7 @@ package apple.lib.ebean.database;
 import java.io.File;
 import org.apache.logging.log4j.Logger;
 
-public class AppleEbeanMetaConfig {
+public class AppleEbeanDatabaseMetaConfig {
 
     private static Class<?> mainClass;
     private static Logger logger;
@@ -26,7 +26,7 @@ public class AppleEbeanMetaConfig {
     }
 
     public static void setLogger(Logger logger) {
-        AppleEbeanMetaConfig.logger = logger;
+        AppleEbeanDatabaseMetaConfig.logger = logger;
     }
 
     public static Class<?> getMainClass() {
@@ -35,7 +35,7 @@ public class AppleEbeanMetaConfig {
     }
 
     public static void setMainClass(Class<?> mainClass) {
-        AppleEbeanMetaConfig.mainClass = mainClass;
+        AppleEbeanDatabaseMetaConfig.mainClass = mainClass;
     }
 
     public static File getRootFolder() {
@@ -47,10 +47,10 @@ public class AppleEbeanMetaConfig {
     }
 
     public static void setRootFolder(File rootFolder) {
-        AppleEbeanMetaConfig.rootFolder = rootFolder;
+        AppleEbeanDatabaseMetaConfig.rootFolder = rootFolder;
     }
 
     private static String className() {
-        return AppleEbeanMetaConfig.class.getCanonicalName();
+        return AppleEbeanDatabaseMetaConfig.class.getCanonicalName();
     }
 }

@@ -34,7 +34,7 @@ public abstract class AppleEbeanDatabase {
         // We should use the classloader that loaded this plugin
         // because this plugin has our ebean dependencies
         ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
-        ClassLoader pluginClassLoader = AppleEbeanMetaConfig.getMainClass().getClassLoader();
+        ClassLoader pluginClassLoader = AppleEbeanDatabaseMetaConfig.getMainClass().getClassLoader();
 
         // Set the current thread's contextClassLoader to the classLoader with the ebean dependencies
         // This allows the class to initialize itself with access to the required class dependencies
@@ -60,7 +60,7 @@ public abstract class AppleEbeanDatabase {
         // Restore the contextClassLoader to what it was originally
         Thread.currentThread().setContextClassLoader(originalClassLoader);
 
-        AppleEbeanMetaConfig.logInfo("Successfully created database");
+        AppleEbeanDatabaseMetaConfig.logInfo("Successfully created database");
     }
 
     private static void makeFile(File file) {
@@ -110,7 +110,7 @@ public abstract class AppleEbeanDatabase {
     }
 
     private File migrationFile() {
-        File folder = AppleEbeanMetaConfig.getRootFolder();
+        File folder = AppleEbeanDatabaseMetaConfig.getRootFolder();
         File file = new File(folder, Path.of("db", getName()).toString());
         file.mkdirs();
         return file;
