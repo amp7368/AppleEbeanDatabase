@@ -48,9 +48,6 @@ dependencies {
     // migration
     compileOnly "io.ebean:ebean-ddl-generator:${ebean_version}"
 
-    // logging
-    compileOnly 'org.apache.logging.log4j:log4j-api:2.20.0'
-
     compileOnly 'com.google.code.gson:gson:2.10'
 }
 
