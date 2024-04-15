@@ -13,4 +13,12 @@ public interface AppleEbeanDatabaseConfig {
     boolean shouldCreateDatabase();
 
     boolean shouldRunMigration();
+
+    default boolean isConfigured() {
+        return true;
+    }
+
+    default boolean isStrictMode() {
+        return true;
+    }
 }

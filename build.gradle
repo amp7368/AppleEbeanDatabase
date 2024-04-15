@@ -39,7 +39,7 @@ configurations.configureEach {
     }
 }
 
-project.ext.ebean_version = '13.14.1'
+project.ext.ebean_version = '13.17.4'
 // https://search.maven.org/search?q=g:io.ebean
 dependencies {
     // sql

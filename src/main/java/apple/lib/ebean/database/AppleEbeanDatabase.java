@@ -27,8 +27,12 @@ public abstract class AppleEbeanDatabase {
 
     private static final List<AppleEbeanDatabase> databases = new ArrayList<>();
     private final Database db;
+    private final List<Class<?>> entities = new ArrayList<>();
 
     public AppleEbeanDatabase() {
+        if (!getConfig().isConfigured()) {
+            throw new IllegalStateException("Please configure DatabaseConfig for " + getName());
+        }
         DataSourceConfig dataSourceConfig = getConfig().configure(new DataSourceConfig());
         DatabaseConfig dbConfig = configureDatabase(dataSourceConfig);
         // We should use the classloader that loaded this plugin
@@ -64,13 +68,12 @@ public abstract class AppleEbeanDatabase {
     }
 
     private static void makeFile(File file) {
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if (file.exists()) return;
+        file.getParentFile().mkdirs();
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -78,10 +81,11 @@ public abstract class AppleEbeanDatabase {
         return this.db;
     }
 
-    private DatabaseConfig configureDatabase(DataSourceConfig dataSourceConfig) {
+    protected DatabaseConfig configureDatabase(DataSourceConfig dataSourceConfig) {
         DatabaseConfig dbConfig = new DatabaseConfig();
         dbConfig.setDataSourceConfig(dataSourceConfig);
         dbConfig.setRunMigration(true);
+        addEntities(this.entities);
         dbConfig.addAll(getEntities());
         dbConfig.setObjectMapper(this.getObjectMapper());
         dbConfig.setDefaultServer(isDefault());
@@ -94,19 +98,29 @@ public abstract class AppleEbeanDatabase {
         dbMigration.setServer(getDB());
         try {
             File file = migrationFile();
+            String path = "filesystem:" + file.getAbsolutePath();
             dbMigration.setPathToResources(file.getPath());
-            dbMigration.generateMigration();
+            dbMigration.setStrictMode(getConfig().isStrictMode());
+
             MigrationConfig config = new MigrationConfig();
             config.setName(getName());
             // I hate this
-            String path = file.getPath();
             config.setMigrationPath(path);
             config.setMigrationInitPath(path);
-            MigrationRunner runner = new MigrationRunner(config);
-            runner.run(getDB().dataSource());
+
+            configureMigration(dbMigration, config);
+
+            dbMigration.generateMigration();
+            if (getConfig().shouldRunMigration()) {
+                MigrationRunner runner = new MigrationRunner(config);
+                runner.run(getDB().dataSource());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void configureMigration(DbMigration migration, MigrationConfig config) {
     }
 
     private File migrationFile() {
@@ -124,7 +138,11 @@ public abstract class AppleEbeanDatabase {
         return null;
     }
 
-    protected abstract List<Class<?>> getEntities();
+    protected abstract void addEntities(List<Class<?>> entities);
+
+    protected List<Class<?>> getEntities() {
+        return this.entities;
+    }
 
     protected abstract Collection<Class<?>> getQueryBeans();
 
